@@ -38,24 +38,24 @@ public class CityResource {
 	@RequestMapping(value="/all", method=RequestMethod.GET)
 	public ResponseEntity<List<City>> findAll() throws FileNotFoundException {
 
-		File arquivo = new File("dados.csv");
+		File file = new File("dados.csv");
 
-		Scanner leitor = new Scanner(arquivo);
+		Scanner sc = new Scanner(file);
 		List<City> cities = new ArrayList<>();
 
-		leitor.nextLine();
+		sc.nextLine();
 
-		while(leitor.hasNext()) {
+		while(sc.hasNext()) {
 
-			String[] campos = leitor.nextLine().split(",");
-			City cidade = new City(Integer.parseInt(campos[0]), campos[1], campos[2], Boolean.parseBoolean(campos[3]), Double.parseDouble(campos[4]), Double.parseDouble(campos[5]), campos[6], campos[7], campos[8], campos[9]);
+			String[] fields = sc.nextLine().split(",");
+			City city = new City(Integer.parseInt(fields[0]), fields[1], fields[2], Boolean.parseBoolean(fields[3]), Double.parseDouble(fields[4]), Double.parseDouble(fields[5]), fields[6], fields[7], fields[8], fields[9]);
 
-			cities.add(cidade);
+			cities.add(city);
 
 
 		}
 
-		leitor.close();
+		sc.close();
 
 		return ResponseEntity.ok().body(cities);
 	}
@@ -66,16 +66,17 @@ public class CityResource {
 	@RequestMapping(value="/all/capitals", method=RequestMethod.GET)
 	public ResponseEntity<List<City>> findAllCapitals() throws FileNotFoundException {
 
-		File arquivo = new File("dados.csv");
 
-		Scanner leitor = new Scanner(arquivo);
+		File file = new File("dados.csv");
+
+		Scanner sc = new Scanner(file);
 		List<City> cities = new ArrayList<>();
 
-		leitor.nextLine();
+		sc.nextLine();
 
-		while(leitor.hasNext()) {
+		while(sc.hasNext()) {
 
-			String[] fields = leitor.nextLine().split(",");
+			String[] fields = sc.nextLine().split(",");
 			City city = new City(Integer.parseInt(fields[0]), fields[1], fields[2], Boolean.parseBoolean(fields[3]), Double.parseDouble(fields[4]), Double.parseDouble(fields[5]), fields[6], fields[7], fields[8], fields[9]);
 
 			if (city.getCapital()) 
@@ -83,7 +84,8 @@ public class CityResource {
 
 
 		}
-		leitor.close();
+
+		sc.close();
 
 
 		List<City> sortedCities = cities.stream()
@@ -97,9 +99,9 @@ public class CityResource {
 	@RequestMapping(value="/minMax", method=RequestMethod.GET)
 	public ResponseEntity<List<StateDTO>> findMinMaxState() throws FileNotFoundException {
 
-		File arquivo = new File("dados.csv");
+		File file = new File("dados.csv");
 
-		Scanner leitor = new Scanner(arquivo);
+		Scanner leitor = new Scanner(file);
 		List<City> cities = new ArrayList<>();
 
 		leitor.nextLine();
@@ -178,7 +180,7 @@ public class CityResource {
 
 
 		}
-		
+
 		leitor.close();
 
 		State rondonia = new State("RO", "Rondonia", cities.stream().filter(c -> c.getUf().equals("RO")).collect(Collectors.toList()));
@@ -216,29 +218,29 @@ public class CityResource {
 
 		return ResponseEntity.ok().body(states);
 	}
-	
-	
+
+
 	/* 5 */
 	@RequestMapping(value="/ibge/{id}", method=RequestMethod.GET)
 	public ResponseEntity<List<City> > findById(@PathVariable int id) throws FileNotFoundException {
 
-		File arquivo = new File("dados.csv");
+		File file = new File("dados.csv");
 
-		Scanner leitor = new Scanner(arquivo);
+		Scanner sc = new Scanner(file);
 		List<City> cities = new ArrayList<>();
 
-		leitor.nextLine();
+		sc.nextLine();
 
-		while(leitor.hasNext()) {
+		while(sc.hasNext()) {
 
-			String[] campos = leitor.nextLine().split(",");
-			City cidade = new City(Integer.parseInt(campos[0]), campos[1], campos[2], Boolean.parseBoolean(campos[3]), Double.parseDouble(campos[4]), Double.parseDouble(campos[5]), campos[6], campos[7], campos[8], campos[9]);
+			String[] campos = sc.nextLine().split(",");
+			City city = new City(Integer.parseInt(campos[0]), campos[1], campos[2], Boolean.parseBoolean(campos[3]), Double.parseDouble(campos[4]), Double.parseDouble(campos[5]), campos[6], campos[7], campos[8], campos[9]);
 
-			cities.add(cidade);
+			cities.add(city);
 
 
 		}
-		leitor.close();
+		sc.close();
 
 
 		List<City> cityByIbge = cities.stream()
@@ -256,23 +258,24 @@ public class CityResource {
 	@RequestMapping(value="/uf/{uf}", method=RequestMethod.GET)
 	public ResponseEntity<List<City>> findCitiesByUf(@PathVariable String uf) throws FileNotFoundException {
 
-		File arquivo = new File("dados.csv");
+		File file = new File("dados.csv");
 
-		Scanner leitor = new Scanner(arquivo);
+		Scanner sc = new Scanner(file);
 		List<City> cities = new ArrayList<>();
 
-		leitor.nextLine();
+		sc.nextLine();
 
-		while(leitor.hasNext()) {
+		while(sc.hasNext()) {
 
-			String[] fields = leitor.nextLine().split(",");
+			String[] fields = sc.nextLine().split(",");
 			City city = new City(Integer.parseInt(fields[0]), fields[1], fields[2], Boolean.parseBoolean(fields[3]), Double.parseDouble(fields[4]), Double.parseDouble(fields[5]), fields[6], fields[7], fields[8], fields[9]);
 
 			cities.add(city);
 
 
 		}
-		leitor.close();
+
+		sc.close();
 
 		List<City> cityByUf = cities.stream()
 				.filter(city -> city.getUf().equals(uf))
@@ -291,10 +294,10 @@ public class CityResource {
 
 		File file = new File("dados.csv");
 
-		Scanner leitor = new Scanner(file);
+		Scanner sc = new Scanner(file);
 
-		while(leitor.hasNext()) {
-			leitor.nextLine();
+		while(sc.hasNext()) {
+			sc.nextLine();
 
 		}
 
@@ -305,7 +308,7 @@ public class CityResource {
 		pw.println(city.getIbge_id() + "," + city.getUf() + "," + city.getName() + "," + city.getCapital() + "," + city.getLon() + "," + city.getLat() + "," + city.getNo_accents() + "," + city.getAlternative_names() + "," + city.getMicroregion() + "," + city.getMesoregion());
 		pw.flush();
 		pw.close();
-		leitor.close();
+		sc.close();
 
 		// TODO mudar o path aqui em baixo (acho q ta certo)
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/ibge/{id}").buildAndExpand(city.getIbge_id()).toUri();
@@ -343,7 +346,6 @@ public class CityResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	/* method for 9 ex */ 
 	public int findIndexColumn(String[] columns, String column) {
 
 		for (int i= 0; i < columns.length; i++) {
